@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dashboard.css */
+.scroll-hidden {
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scroll-hidden::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  
+/* Ensure that particles are placed behind the form */
+.particle-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Make sure the particles are behind the form */
+}
+
+.register-form {
+  position: relative;
+  z-index: 1; /* Ensure form is above the particles */
+}
