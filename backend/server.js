@@ -46,9 +46,10 @@ app.use('/api', adminUserRoutes);
 // Use the image routes
 app.use('/api', imageUrlRoutes);
 
-// app.use(cors({
-//     origin: ["http://localhost:5173/"]
-// }))
+
+app.use(cors({
+    origin: ["http://localhost:5173/", "https://saletracker-frontend.onrender.com/"]
+}))
 
 
 // Connect to MongoDB
