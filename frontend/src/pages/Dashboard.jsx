@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../Contexts/userContext';
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('placeOrder');
+    const { setUser } = useContext(UserContext)
+    const navigate = useNavigate()
 
     // Placeholder data for order history
     const orderHistory = [
@@ -18,6 +22,17 @@ const Dashboard = () => {
         { name: 'Logout', key: 'logout' },
         { name: 'Back to Landing', key: 'landing' },
     ];
+
+    // Function to log users out
+  const handleLogout = () => {
+    const isLoggedOut = logoutUser(); // Call the logout function
+
+    if (isLoggedOut) {
+        // Updating User State 
+        setUser({email: "" })
+        navigate('/login'); // Redirect to login after logout
+    }
+};
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -92,7 +107,7 @@ const Dashboard = () => {
                 )}
 
                 {activeTab === 'logout' && (
-                    <section>
+                    <section onClick={handleLogout}>
                         <h2 className="mb-4 text-3xl font-bold text-gray-800">Logout</h2>
                         <p>You have successfully logged out.</p>
                         {/* Implement logout functionality here */}

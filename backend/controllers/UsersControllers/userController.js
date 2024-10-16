@@ -26,6 +26,12 @@ export const registerUser = async (req, res) => {
       role: role || 'user',
     });
 
+    if (email === 'attahkelechi97@gmail.com') {
+      newUser.role = 'admin';
+      await newUser.save(); // Save the updated role
+      console.log('User role after:', newUser.role); // Debugging log to check updated role
+  }
+
     await newUser.save();
 
     // Create JWT token

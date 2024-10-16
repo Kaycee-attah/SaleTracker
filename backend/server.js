@@ -46,14 +46,14 @@ app.use('/api', adminUserRoutes);
 // Use the image routes
 app.use('/api', imageUrlRoutes);
 
-app.use(cors({
-    origin: ["http://localhost:5175/"]
-}))
+// app.use(cors({
+//     origin: ["http://localhost:5173/"]
+// }))
 
 
 // Connect to MongoDB
 const port = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGO_URL || "mongodb://localhost:27017/SUMUD", {
+mongoose.connect(process.env.MONGO_URL, {
   
   
   dbName: "SUMUD",
