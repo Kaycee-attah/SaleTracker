@@ -23,7 +23,8 @@ import AddSales from "./pages/Sales/Add Sales";
 import AdminDashboard from "./pages/adminDashboard";
 import AllUsers from "./pages/Profile/AllUsers";
 import Dashboard from "./pages/Dashboard";
-import UploadImages from "./pages/UploadImage";
+import UploadImages from "./pages/Image/UploadImage";
+import LoginUpload from "./pages/Image/LoginUpload";
 
 const App = () => {
     return (
@@ -57,6 +58,7 @@ const App = () => {
                       <Route path="user" element={<UserProfile />} />
                       <Route path="all-users" element={<AllUsers />} />
                       <Route path="upload-images" element={<UploadImages />} />
+                      <Route path="upload/login" element={<LoginUpload />} />
                   </Route>
               </Route>
           </Routes>
