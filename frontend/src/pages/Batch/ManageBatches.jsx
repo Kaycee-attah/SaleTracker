@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 // Fetch batches from your backend
 const fetchBatches = async () => {
   try {
-    const response = await fetch('/api/batches'); // Replace with your actual API endpoint
+    const response = await fetch(`${BASE_URL}/batches`); // Replace with your actual API endpoint
     const data = await response.json();
     return data;
   } catch (error) {
@@ -16,7 +17,7 @@ const fetchBatches = async () => {
 // Fetch sales for a batch
 const fetchSales = async (batchId) => {
   try {
-    const response = await fetch(`/api/batches/${batchId}/sales`); // Replace with your actual API endpoint
+    const response = await fetch(`${BASE_URL}/batches/${batchId}/sales`); // Replace with your actual API endpoint
     const data = await response.json();
     return data;
   } catch (error) {
@@ -28,7 +29,7 @@ const fetchSales = async (batchId) => {
 // Fetch expenses for a batch
 const fetchExpenses = async (batchId) => {
   try {
-    const response = await fetch(`/api/batches/${batchId}/expenses`); // Replace with your actual API endpoint
+    const response = await fetch(`${BASE_URL}/batches/${batchId}/expenses`); // Replace with your actual API endpoint
     const data = await response.json();
     return data;
   } catch (error) {
