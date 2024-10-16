@@ -111,6 +111,10 @@ const Menu = () => {
                 <i className="fa-solid fa-list-check"></i>
                 <Link to="/admin-dashboard/add-sales-category" className="text-lg font-medium cursor-pointer">Add Sales Category</Link>
               </li>
+              <li className="flex items-center space-x-3 hover:text-green-300">
+                <i className="fa-solid fa-image"></i>
+                <Link to="/admin-dashboard/upload-images" className="text-lg font-medium cursor-pointer">Upload Images</Link>
+              </li>
             </ul>
           </div>
 

@@ -23,6 +23,10 @@ import AddSales from "./pages/Sales/Add Sales";
 import AdminDashboard from "./pages/adminDashboard";
 import AllUsers from "./pages/Profile/AllUsers";
 import Dashboard from "./pages/Dashboard";
+import UploadImages from "./pages/UploadImage";
+import UploadPage from "./pages/UploadImg_LandingPage";
+import UploadImg_LandingPage from "./pages/UploadImg_LandingPage";
+import UploadImg_LoginPage from "./pages/UploadImg_LoginPage";
 
 const App = () => {
     return (
@@ -55,6 +59,11 @@ const App = () => {
                       <Route path="add-product" element={<AddProduct />} />
                       <Route path="user" element={<UserProfile />} />
                       <Route path="all-users" element={<AllUsers />} />
+                      <Route path="upload-images" element={<UploadImages />} />
+                      {/* Upload images to different folders */}
+                      <Route path="upload/homepage" element={<UploadImg_LandingPage folder="homepage" />} />
+                      <Route path="upload/login" element={<UploadImg_LoginPage folder="login" />} />
+                      <Route path="upload/register" element={<UploadPage folder="register" />} />
                   </Route>
               </Route>
           </Routes>
