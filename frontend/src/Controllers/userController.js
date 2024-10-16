@@ -81,7 +81,7 @@ export const loginUser = async (userData) => {
     }
     
 
-    const res = await fetch(`${BASE_URL}api/auth/login`, {
+    const res = await fetch(`https://saletracker-backend.onrender.com/api/auth/login`, {
         method: 'POST',
         
         headers: {
