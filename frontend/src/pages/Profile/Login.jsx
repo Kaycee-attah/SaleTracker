@@ -26,6 +26,7 @@ const Login = () => {
         try {
             // Log the User In
             const response = await loginUser(formData); // Call the controller function
+            console.log(response);
             
 
             // Store the email and role in local storage and update the context
