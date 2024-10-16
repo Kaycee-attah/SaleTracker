@@ -38,7 +38,7 @@ export const registerUser = async (userData) => {
 
 // Example function to assign roles to users
 export const assignUserRole = async (userId, role) => {
-    const res = await fetch(`${BASE_URL}/users/${userId}/role`, {
+    const res = await fetch(`${API_URL}/${userId}/role`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

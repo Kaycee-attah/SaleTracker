@@ -1,4 +1,4 @@
-
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 
 // Function to fetch expenses from the backend
 export const getExpenses = async ({date, category, timeFrame}) => {
@@ -9,7 +9,7 @@ export const getExpenses = async ({date, category, timeFrame}) => {
     if (category) params.append('category', category);
     if (timeFrame) params.append('timeFrame', timeFrame);
   
-    const res = await fetch(`/api/expenses?${params.toString()}`); // Append query parameters to the endpoint
+    const res = await fetch(`${BASE_URL}/expenses?${params.toString()}`); // Append query parameters to the endpoint
     if (!res.ok) throw new Error('Failed to fetch expenses');
     return await res.json();
   };
@@ -17,7 +17,7 @@ export const getExpenses = async ({date, category, timeFrame}) => {
   
   // Function to add a new expense
   export const addExpense = async (expense) => {
-    const res = await fetch('/api/expenses/add', {
+    const res = await fetch('${BASE_URL}/expenses/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const getExpenses = async ({date, category, timeFrame}) => {
   
   // Function to delete an expense
   export const deleteExpense = async (_id) => {
-    const res = await fetch(`/api/expenses/${_id}`, {
+    const res = await fetch(`${BASE_URL}/expenses/${_id}`, {
       method: 'DELETE',
     });
     if (!res.ok) throw new Error('Failed to delete expense');
@@ -39,7 +39,7 @@ export const getExpenses = async ({date, category, timeFrame}) => {
   
   // Function to update an expense
   export const updateExpense = async (_id, updatedExpense) => {
-    const res = await fetch(`/api/expenses/${_id}`, {
+    const res = await fetch(`${BASE_URL}/expenses/${_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

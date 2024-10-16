@@ -1,4 +1,4 @@
-const BASE_URL = '/api'; // Adjust the base URL if needed
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 
 // Fetch existing sales categories
 export const fetchSalesCategories = async () => {

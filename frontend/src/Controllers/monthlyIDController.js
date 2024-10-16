@@ -1,7 +1,8 @@
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 // controllers/idController.js
 export const generateID = async () => {
     try {
-      const response = await fetch('/api/generate-id', {
+      const response = await fetch(`${BASE_URL}/generate-id`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

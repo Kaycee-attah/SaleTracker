@@ -4,6 +4,7 @@ import { storage } from '../firebase';
 // src/controllers/imageController.js
 
 export const uploadImage = async (file) => {
+  const BASE_URL = 'https://saletracker-backend.onrender.com/api';
   if (!file) return null;
 
   const storageRef = ref(storage, `uploads/${file.name}`);
@@ -13,7 +14,7 @@ export const uploadImage = async (file) => {
     const url = await getDownloadURL(storageRef);
 
     // Sending the image URL to your backend
-    const response = await fetch('/api/upload-image-url', {
+    const response = await fetch(`${BASE_URL}/upload-image-url`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

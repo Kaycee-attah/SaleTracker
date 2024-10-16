@@ -1,4 +1,4 @@
-const BASE_URL = '/api/sales'; // Adjust the base URL if needed
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 
 // Function to get sales
 export const getSales = async ({ date, category, timeFrame }) => {
@@ -9,7 +9,7 @@ export const getSales = async ({ date, category, timeFrame }) => {
     }).toString();
 
     
-    const res = await fetch(`${BASE_URL}?${queryParams}`, {
+    const res = await fetch(`${BASE_URL}/sales?${queryParams}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const addSale = async (saleData) => {
 
 // Function to delete a sale
 export const deleteSale = async (id) => {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const res = await fetch(`${BASE_URL}/sales/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const updateSale = async (id, saleData) => {
     
     
     
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const res = await fetch(`${BASE_URL}/sales/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 // controllers/categoryController.js
 
-const BASE_URL = '/api'; // Adjust this to your API URL
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 
 // Function to fetch all categories
 export const fetchCategories = async () => {
