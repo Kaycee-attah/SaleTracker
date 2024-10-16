@@ -1,5 +1,6 @@
-const BASE_URL = '/api'; // Base URL for your API
-const API_URL = '/api/auth/users'; // Change this to match your backend route
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
+const API_URL = `${BASE_URL}/auth/users`; 
+
 
 // Register user function
 export const registerUser = async (userData) => {
@@ -81,14 +82,14 @@ export const loginUser = async (userData) => {
     }
     
 
-    const res = await fetch(`https://saletracker-backend.onrender.com/api/auth/login`, {
-        method: 'POST',
-        
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData), // Send user data as JSON
+    const res = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
     });
+    
 
     const data = await res.json(); // Parse the response
 

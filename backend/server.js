@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
-import cors from 'cors'
+import dotenv from 'dotenv';
+import cors from 'cors';
 import { expensesRoute } from "./routes/expenseRoute.js";
 import { categoryRoutes } from "./routes/categoryRoutes.js";
 import { salesRoute } from "./routes/salesRoute.js";
@@ -14,63 +14,46 @@ import { adminUserRoutes } from "./routes/UsersRoutes/adminUserRoutes.js";
 import { imageUrlRoutes } from "./routes/imageRoutes.js";
 
 // Initialize Express App
-
 const app = express();
+dotenv.config();
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
 
-dotenv.config(); // Routes
+// CORS Middleware
+app.use(cors({
+    origin: "https://saletracker-frontend.onrender.com",  // Allow only your frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true  // Allow credentials (cookies, authorization headers, etc.)
+}));
 
-// Use the expense routes
-app.use('/api/expenses', expensesRoute);
-// Use category routes
-app.use('/api', categoryRoutes);
-// Use Sales routes
-app.use('/api/sales', salesRoute);
-// Use the sales category routes
-app.use('/api/sales/categories', salesCategoryRoute);
-// Use batch routes
-app.use("/api/batches", batchRoutes);
+// Handle CORS preflight requests for all routes
+app.options('*', cors());
 
 // Routes
-app.use('/api', monthlyIDRoutes);
-
-app.use('/api', getTotalsRoute)
-
-app.use('/api/auth', userRoutes);
-
-// Use the routes in the app
-app.use('/api', adminUserRoutes);
-
-// Use the image routes
-app.use('/api', imageUrlRoutes);
-
-app.use((_req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-
-  next();
-});
-
-app.use(cors({
-    origin: "https://saletracker-frontend.onrender.com",
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}))
-
-app.options('*', cors()); // Preflight response for all routes
-
+app.use('/api/expenses', expensesRoute);  // Expenses routes
+app.use('/api', categoryRoutes);  // Category routes
+app.use('/api/sales', salesRoute);  // Sales routes
+app.use('/api/sales/categories', salesCategoryRoute);  // Sales categories routes
+app.use("/api/batches", batchRoutes);  // Batch routes
+app.use('/api', monthlyIDRoutes);  // Monthly ID routes
+app.use('/api', getTotalsRoute);  // Totals routes
+app.use('/api/auth', userRoutes);  // Authentication routes
+app.use('/api', adminUserRoutes);  // Admin user routes
+app.use('/api', imageUrlRoutes);  // Image routes
 
 // Connect to MongoDB
 const port = process.env.PORT || 10000;
 mongoose.connect(process.env.MONGO_URL, {
-  
-  
-  dbName: "SUMUD",
+    dbName: "SUMUD",
 })
   .then(() => {
     console.log("Successfully connected to Database");
     app.listen(port, '0.0.0.0', () => console.log(`Listening on port ${port}`));
   })
   .catch((err) => console.log(err));
+
+// Error Handling for Routes Not Found
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
