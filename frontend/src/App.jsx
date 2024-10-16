@@ -21,8 +21,8 @@ import GuestLayout from "./Layouts/GuestLayout";
 import AdminLayout from "./Layouts/AdminLayout";
 import AddSales from "./pages/Sales/Add Sales";
 import AdminDashboard from "./pages/adminDashboard";
-import Dashboard from "./pages/dashboard";
 import AllUsers from "./pages/Profile/AllUsers";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
     return (
