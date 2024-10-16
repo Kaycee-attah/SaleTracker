@@ -1,5 +1,5 @@
-const BASE_URL = 'https://saletracker-backend.onrender.com'; // Base URL for your API
-const API_URL = 'https://saletracker-backend.onrender.com/auth/users'; // Change this to match your backend route
+const BASE_URL = '/api'; // Base URL for your API
+const API_URL = '/api/auth/users'; // Change this to match your backend route
 
 // Register user function
 export const registerUser = async (userData) => {

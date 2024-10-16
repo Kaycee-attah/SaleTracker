@@ -38,7 +38,7 @@ app.use('/api', monthlyIDRoutes);
 
 app.use('/api', getTotalsRoute)
 
-app.use('https://saletracker-backend.onrender.com/auth', userRoutes);
+app.use('/api/auth', userRoutes);
 
 // Use the routes in the app
 app.use('/api', adminUserRoutes);
@@ -54,7 +54,7 @@ app.use((_req, res, next) => {
 });
 
 app.use(cors({
-    origin: ["http://localhost:5173/", "https://saletracker-frontend.onrender.com/"],
+    origin: "https://saletracker-frontend.onrender.com/",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }))
