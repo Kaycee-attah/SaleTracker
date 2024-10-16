@@ -29,7 +29,7 @@ const AddBatch = () => {
 const generateQRCode = () => {
     if (batchName && batchNumber) {
       // Update the URL with batchName and batchNumber
-      const qrValue = `http://192.168.0.6:5173/batch-details?batchName=${encodeURIComponent(batchName)}&batchNumber=${encodeURIComponent(batchNumber)}`;
+      const qrValue = `https://saletracker-frontend.onrender.com/admin-dashboard/batch-details?batchName=${encodeURIComponent(batchName)}&batchNumber=${encodeURIComponent(batchNumber)}`;
       setQrCode(qrValue);
     } else {
       setMessage('Please generate or input a batch name and number first.');
