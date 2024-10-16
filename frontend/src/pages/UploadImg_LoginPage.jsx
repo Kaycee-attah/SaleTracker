@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { saveImageToMongoDB, uploadImageToFirebase } from '../controllers/imageController';
+import { saveImageToMongoDB, uploadImageToFirebase } from '../Controllers/imageController';
 
 const UploadImg_LoginPage = ({ folder }) => {
     const [formData, setFormData] = useState({ email: '', password: '' });
