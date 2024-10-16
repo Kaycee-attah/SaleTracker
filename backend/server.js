@@ -54,7 +54,7 @@ app.use((_req, res, next) => {
 });
 
 app.use(cors({
-    origin: "https://saletracker-frontend.onrender.com/",
+    origin: "https://saletracker-frontend.onrender.com",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }))
