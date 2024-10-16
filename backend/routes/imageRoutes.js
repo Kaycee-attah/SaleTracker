@@ -1,7 +1,7 @@
 // routes/imageRoutes.js
 import express from 'express';
 import { uploadImageUrl } from '../controllers/uploadImageController.js';
-import { saveImageUrl } from '../controllers/imageController.js';
+import { saveImageUrl } from '../controllers/PicturesController.js';
 
 const router = express.Router();
 
