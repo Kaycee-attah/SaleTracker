@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Automatically import chart.js modules
 
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 const DailyChart = () => {
     const [dailyData, setDailyData] = useState([]);
     const [chartType, setChartType] = useState('sales'); // State for chart type selection
@@ -9,7 +10,7 @@ const DailyChart = () => {
     useEffect(() => {
         const fetchDailyData = async () => {
             try {
-                const response = await fetch('/api/days/totals'); // Replace with your API route
+                const response = await fetch(`${BASE_URL}/days/totals`); // Replace with your API route
                 if (!response.ok) {
                     throw new Error('Failed to fetch daily totals');
                 }

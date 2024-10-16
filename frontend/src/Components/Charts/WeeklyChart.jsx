@@ -3,13 +3,14 @@ import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Automatically import chart.js modules
 
 const WeeklyChart = () => {
+    const BASE_URL = 'https://saletracker-backend.onrender.com/api';
     const [weeklyData, setWeeklyData] = useState([]);
     const [chartType, setChartType] = useState('sales'); // State for chart type selection
 
     useEffect(() => {
         const fetchWeeklyData = async () => {
             try {
-                const response = await fetch('/api/weeks/totals'); // Replace with your API route
+                const response = await fetch(`${BASE_URL}/weeks/totals`); // Replace with your API route
                 if (!response.ok) {
                     throw new Error('Failed to fetch weekly totals');
                 }

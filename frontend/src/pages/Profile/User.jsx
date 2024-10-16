@@ -3,6 +3,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase';
 
 const UserProfile = () => {
+  const BASE_URL = 'https://saletracker-backend.onrender.com/api';
   const [user, setUser] = useState(null);
   const [userID, setUserID] = useState("");
   const [adminUser, setAdminUser] = useState(null);
@@ -20,7 +21,7 @@ const UserProfile = () => {
       try {
         if (!userEmail) throw new Error('User email not found');
 
-        const response = await fetch(`/api/current-user/${userEmail}`);
+        const response = await fetch(`${BASE_URL}/current-user/${userEmail}`);
         if (!response.ok) throw new Error('Failed to fetch user data');
         const data = await response.json();
 
@@ -28,7 +29,7 @@ const UserProfile = () => {
         setUserID(data._id);
         setFormData({ name: data.name, email: data.email });
 
-        const adminResponse = await fetch(`/api/admin-user/id/${data._id}`);
+        const adminResponse = await fetch(`${BASE_URL}/admin-user/id/${data._id}`);
         if (adminResponse.ok) {
           const adminData = await adminResponse.json();
           setAdminUser(adminData);
@@ -100,7 +101,7 @@ const UserProfile = () => {
     try {
       console.log(formDataToSubmit);
       
-      const response = await fetch('/api/admin-users', {
+      const response = await fetch(`${BASE_URL}/admin-users`, {
         method: 'POST',
         body: formDataToSubmit,
       });
@@ -116,11 +117,11 @@ const UserProfile = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="w-full h-screen p-8 mx-auto bg-white rounded-lg shadow-md min-w-4xl">Loading...</div>;
   }
 
   if (!user) {
-    return <div>User not found</div>;
+    return <div className="w-full h-screen p-8 mx-auto bg-white rounded-lg shadow-md min-w-4xl">User not found</div>;
   }
 
   return (

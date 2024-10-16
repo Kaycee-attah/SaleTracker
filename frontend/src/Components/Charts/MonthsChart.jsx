@@ -3,13 +3,14 @@ import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Automatically import chart.js modules
 
 const MonthlyChart = () => {
+    const BASE_URL = 'https://saletracker-backend.onrender.com/api';
     const [monthlyData, setMonthlyData] = useState([]);
     const [chartType, setChartType] = useState('sales'); // State for chart type selection
 
     useEffect(() => {
         const fetchMonthlyData = async () => {
             try {
-                const response = await fetch('/api/months/totals'); // Replace with your API route
+                const response = await fetch(`${BASE_URL}/months/totals`); // Replace with your API route
                 if (!response.ok) {
                     throw new Error('Failed to fetch monthly totals');
                 }
