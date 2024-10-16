@@ -53,7 +53,7 @@ const BatchDetails = () => {
       {/* Card Section */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {/* Add Expenses Card */}
-        <Link to="/add-expense" state={{BatchName, BatchNumber, scanned}}
+        <Link to="/admin-dashboard/add-expense" state={{BatchName, BatchNumber, scanned}}
           className="max-w-sm p-8 transition-transform duration-300 transform bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-2xl hover:scale-105"
           
         >
@@ -67,7 +67,7 @@ const BatchDetails = () => {
         </Link>
 
         {/* Add Sales Card */}
-        <Link to="/add-sales" state={{BatchName, BatchNumber, scanned}}
+        <Link to="/admin-dashboard/add-sales" state={{BatchName, BatchNumber, scanned}}
           className="max-w-sm p-8 transition-transform duration-300 transform bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-2xl hover:scale-105"
           
         >

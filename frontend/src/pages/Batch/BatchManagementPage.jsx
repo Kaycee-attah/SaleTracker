@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const BatchManagement = () => {
+  const BASE_URL = 'https://saletracker-backend.onrender.com/api';
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -54,7 +55,7 @@ const BatchManagement = () => {
   // Handle saving the edited batch
   const handleSaveBatchEdit = async () => {
     try {
-      const response = await fetch(`/api/batches/${batchId}`, {
+      const response = await fetch(`${BASE_URL}/batches/${batchId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editBatchData),
@@ -76,7 +77,7 @@ const BatchManagement = () => {
     const confirmed = window.confirm(`Are you sure you want to delete batch: ${batchName}?`);
     if (confirmed) {
       try {
-        await fetch(`/api/batches/${batchId}`, { method: 'DELETE' });
+        await fetch(`${BASE_URL}/batches/${batchId}`, { method: 'DELETE' });
         alert(`Batch ${batchName} deleted successfully`);
         navigate('/manage-batches'); // Redirect after deletion
       } catch (error) {
@@ -93,7 +94,7 @@ const BatchManagement = () => {
 
   // Handle save after editing
   const handleSaveEdit = async () => {
-    let url = filter === 'sales' ? `/api/sales/${editItem._id}` : `/api/expenses/${editItem._id}`;
+    let url = filter === 'sales' ? `${BASE_URL}/sales/${editItem._id}` : `${BASE_URL}/expenses/${editItem._id}`;
     try {
       const response = await fetch(url, {
         method: 'PUT', // Use PUT or PATCH for updating the item
@@ -122,7 +123,7 @@ const BatchManagement = () => {
   const handleDeleteRow = async (id) => {
     const confirmed = window.confirm(`Are you sure you want to delete this item?`);
     if (confirmed) {
-      let url = filter === 'sales' ? `/api/sales/${id}` : `/api/expenses/${id}`;
+      let url = filter === 'sales' ? `${BASE_URL}/sales/${id}` : `${BASE_URL}/expenses/${id}`;
       try {
         await fetch(url, { method: 'DELETE' });
         alert(`${filter.slice(0, -1)} deleted successfully`);
