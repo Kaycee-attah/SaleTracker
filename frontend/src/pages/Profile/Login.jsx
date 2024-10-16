@@ -80,7 +80,7 @@ const Login = () => {
                 {/* Left Side: Image */}
                 <div className="relative w-full md:w-1/2">
                     <img
-                        src={`../../src/assets/images/food.png`} // replace with the path to your actual cassava image
+                        src={`https://saletracker-frontend.onrender.com/src/assets/images/food.png`} // replace with the path to your actual cassava image
                         alt="Egusi Soup with Cassava Flour"
                         className="object-cover w-full h-full"
                     />
