@@ -38,7 +38,7 @@ app.use('/api', monthlyIDRoutes);
 
 app.use('/api', getTotalsRoute)
 
-app.use('/api/auth', userRoutes);
+app.use('https://saletracker-backend.onrender.com/auth', userRoutes);
 
 // Use the routes in the app
 app.use('/api', adminUserRoutes);
