@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { v4 as uuidv4 } from 'uuid';
-import { createBatch } from '../../controllers/batchController'; // Import the controller function
-import QRCodeScanner from '../../Components/QRCodeScanner';
 import { generateID } from '../../Controllers/monthlyIDController';
+import { createBatch } from '../../Controllers/batchController'
 
 const AddBatch = () => {
   const [batchName, setBatchName] = useState('');
