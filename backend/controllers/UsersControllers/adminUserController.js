@@ -1,4 +1,4 @@
-import bucket from "../../Firebase/firebaseConfig.js";
+
 import AdminUser from "../../models/AdminUserModel.js";
 
 
