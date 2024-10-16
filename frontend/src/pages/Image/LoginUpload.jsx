@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../Controllers/userController';
 import { UserContext } from '../../Contexts/userContext';
-import { saveImageUrl, uploadImage } from '../../Controllers/ImageController';
+import { saveImageUrl, uploadImage } from '../../Controllers/pictureController';
 
 const LoginUpload = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
