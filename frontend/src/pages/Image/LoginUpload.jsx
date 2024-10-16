@@ -1,10 +1,9 @@
 // components/Login.js
-
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../Controllers/userController';
 import { UserContext } from '../../Contexts/userContext';
-import { saveImageUrl, uploadImage } from '../../Controllers/pictureController';
+import { fetchImageUrlById, saveImageUrl, uploadImage, } from '../../Controllers/pictureController';
 
 const LoginUpload = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -16,10 +15,12 @@ const LoginUpload = () => {
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
+    // Handle input field changes
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // Handle image file selection
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -27,15 +28,22 @@ const LoginUpload = () => {
         }
     };
 
+    // Upload the selected image to Firebase and save URL to MongoDB
     const handleImageUpload = async () => {
         if (imageFile) {
             try {
-                // Upload image to Firebase and get the download URL
+                // Upload image to Firebase Storage
                 const url = await uploadImage(imageFile);
-                setImageUrl(url); // Set the image URL to state
+                setImageUrl(url); // Set uploaded image URL in state
 
-                // Now save the URL to MongoDB using fetch
-                await saveImageUrl(url);
+                // Save image URL to MongoDB
+                const savedImage = await saveImageUrl(url);
+                
+                // Fetch the image by its ID
+                const fetchedImage = await fetchImageUrlById(savedImage._id);
+
+                // Set the fetched image URL
+                setImageUrl(fetchedImage.url);
                 setSuccess('Image uploaded and saved successfully!');
             } catch (error) {
                 setError('Failed to upload image: ' + error.message);
@@ -43,6 +51,7 @@ const LoginUpload = () => {
         }
     };
 
+    // Handle form submission for login
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -54,9 +63,9 @@ const LoginUpload = () => {
             const response = await loginUser(formData);
             console.log(response);
 
-            // Store the email and role in local storage and update the context
+            // Store email and role in local storage and update context
             localStorage.setItem("email", formData.email);
-            localStorage.setItem("role", response.user.role); // Store
+            localStorage.setItem("role", response.user.role); // Store role
 
             setSuccess('Login successful! Redirecting...');
 
@@ -64,30 +73,28 @@ const LoginUpload = () => {
                 setUser({ email: response.user.email, role: response.user.role });
             }, 1000);
 
-            // Navigate to the dashboard or home page after successful login
+            // Navigate to dashboard after login
             setTimeout(() => {
                 if (response.user.role === 'admin') {
-                    navigate('/admin-dashboard'); // Redirect to admin dashboard
+                    navigate('/admin-dashboard');
                 } else {
-                    navigate('/dashboard'); // Redirect to regular dashboard
+                    navigate('/dashboard');
                 }
-            }, 2000); // Navigate after 2 seconds
-
+            }, 2000);
         } catch (err) {
-            setError(err.message); // Set error message if login fails
+            setError(err.message);
             setLoading(false);
         }
     };
 
-    // Automatically clear error or success message after 5 seconds
+    // Automatically clear error or success messages after 5 seconds
     useEffect(() => {
         const timer = setTimeout(() => {
             setError('');
             setSuccess('');
-        }, 5000); // Timeout set to 5 seconds
-
-        return () => clearTimeout(timer); // Clear the timeout on component unmount
-    }, [error, success]); // Run effect when error or success changes
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [error, success]);
 
     return (
         <div className="flex items-center justify-center w-full min-h-screen bg-gray-100">
@@ -96,11 +103,11 @@ const LoginUpload = () => {
                 {/* Left Side: Image */}
                 <div className="relative w-full md:w-1/2">
                     <img
-                        src={imageUrl || `https://saletracker-frontend.onrender.com/src/assets/images/food.png`} // Default image or uploaded image
+                        src={imageUrl || `https://saletracker-frontend.onrender.com/src/assets/images/food.png`} // Default or uploaded image
                         alt="Egusi Soup with Cassava Flour"
                         className="object-cover w-full h-full"
                     />
-                    {/* Optional Overlay on Image */}
+                    {/* Optional Overlay */}
                     <div className="absolute inset-0 bg-black opacity-40"></div>
                     {/* Website Logo */}
                     <div className="absolute top-0 left-0 p-4">
@@ -108,20 +115,25 @@ const LoginUpload = () => {
                     </div>
                     {/* Edit Image Button */}
                     <div className="absolute bottom-4 right-4">
-                        <input 
-                            type="file" 
+                        <input
+                            type="file"
                             accept="image/*"
                             onChange={handleFileChange}
-                            className="hidden" 
+                            className="hidden"
                             id="image-upload"
                         />
-                        <label 
-                            htmlFor="image-upload" 
+                        <label
+                            htmlFor="image-upload"
                             className="p-2 text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600"
+                        >
+                            Edit Image
+                        </label>
+                        <button
                             onClick={handleImageUpload}
+                            className="p-2 mt-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
                         >
                             Upload Image
-                        </label>
+                        </button>
                     </div>
                 </div>
 
@@ -130,7 +142,7 @@ const LoginUpload = () => {
                     <h2 className="text-3xl font-bold text-center text-gray-800">Welcome to SUMUD</h2>
                     <p className="mb-6 text-sm text-center text-gray-500">Log in to your account</p>
 
-                    {/* Display error or success message */}
+                    {/* Display error or success messages */}
                     {error && (
                         <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
                             {error}
