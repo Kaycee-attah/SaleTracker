@@ -60,6 +60,6 @@ mongoose.connect(process.env.MONGO_URL, {
 })
   .then(() => {
     console.log("Successfully connected to Database");
-    app.listen(port, 'localhost', () => console.log(`Listening on port ${port}`));
+    app.listen(port, '0.0.0.0', () => console.log(`Listening on port ${port}`));
   })
   .catch((err) => console.log(err));
