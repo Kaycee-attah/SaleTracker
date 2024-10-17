@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { saveLandingPageImageUrlToDB, uploadLandingPageImage } from '../../Controllers/ImagesControllers/landingPageImagesController';
 
 const LandingUpload = () => {
   const BASE_URL = 'https://saletracker-backend.onrender.com/api';
+  const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState({
     hero: '',
     product1: '',
@@ -18,7 +20,8 @@ const LandingUpload = () => {
   const [uploadSuccess, setUploadSuccess] = useState('');
 
   // Fetch images based on section and fileName
-  const fetchImages = async () => {
+  // Fetch images based on section and fileName
+const fetchImages = async () => {
     try {
       const sections = [
         { section: 'landing', name: 'hero' },
@@ -26,7 +29,8 @@ const LandingUpload = () => {
         { section: 'products', name: 'product2' },
         { section: 'cassava', name: 'cassavaFlour' },
       ];
-
+  
+      // Fetch images in parallel
       const fetchedImages = await Promise.all(
         sections.map(async ({ section, name }) => {
           const response = await fetch(`${BASE_URL}/fetch-image/${section}/${name}`);
@@ -34,21 +38,30 @@ const LandingUpload = () => {
             throw new Error(`Failed to fetch image for ${section} - ${name}`);
           }
           const data = await response.json();
+          
+          
           return { name, url: data.imageUrl };
         })
       );
-
+  
       // Set the image URLs for each section
       const newImageUrl = fetchedImages.reduce((acc, { name, url }) => {
-        acc[name] = url;
+        console.log(name, url);
+        acc[name] = url;  // Set the correct image URL for each section
         return acc;
       }, {});
-
+  
+      // Update the state with the new image URLs
       setImageUrl(newImageUrl);
     } catch (error) {
       console.error('Error fetching images:', error);
     }
   };
+
+  useEffect(() => {
+    console.log('Updated imageUrl:', imageUrl);
+  }, [imageUrl]);  // This useEffect will log whenever imageUrl is updated
+  
 
   useEffect(() => {
     fetchImages(); // Fetch images when the component loads
@@ -61,13 +74,29 @@ const LandingUpload = () => {
     }
   };
 
-  const handleUpload = async (section) => {
-    // Upload logic here...
+  const handleUpload = async (sectionName, fileName) => {
+    const uploadedImage = await uploadLandingPageImage(imageFile);
+    if (uploadedImage) {
+      setImageUrl(uploadedImage.imageUrl);
+      
+      alert('Image uploaded successfully!');
+  
+      // Save the URL to MongoDB
+      try {
+        await saveLandingPageImageUrlToDB(uploadedImage.imageUrl, sectionName, fileName);
+        alert('Image URL saved to database successfully!');
+      } catch (error) {
+        alert(error.message);
+      }
+    } else {
+      alert('Failed to upload image.');
+    }
   };
 
   return (
     <div className="w-full min-h-screen overflow-y-scroll bg-white">
       {/* Hero Section */}
+      
       <section
         className="relative flex flex-col items-center justify-center px-6 py-24 text-center bg-center bg-cover"
         style={{ backgroundImage: `url(${imageUrl.hero || '../../src/assets/images/Cassava_Flour_3.png'})` }}
@@ -87,7 +116,7 @@ const LandingUpload = () => {
             Edit Hero
           </label>
           <button
-            onClick={() => handleUpload('hero')}
+            onClick={() => handleUpload('landing', 'hero')}
             className="px-2 py-1 text-xs text-white bg-green-500 rounded-lg hover:bg-green-600"
             disabled={uploading.hero}
           >
@@ -116,7 +145,7 @@ const LandingUpload = () => {
                     Edit
                   </label>
                   <button
-                    onClick={() => handleUpload('product1')}
+                    onClick={() => handleUpload('products', 'product1')}
                     className="px-2 py-1 text-xs text-white bg-green-500 rounded-lg hover:bg-green-600"
                     disabled={uploading.product1}
                   >
@@ -137,7 +166,7 @@ const LandingUpload = () => {
                     Edit
                   </label>
                   <button
-                    onClick={() => handleUpload('product2')}
+                    onClick={() => handleUpload('products', 'product2')}
                     className="px-2 py-1 text-xs text-white bg-green-500 rounded-lg hover:bg-green-600"
                     disabled={uploading.product2}
                   >
@@ -164,7 +193,7 @@ const LandingUpload = () => {
                 Edit
               </label>
               <button
-                onClick={() => handleUpload('cassavaFlour')}
+                onClick={() => handleUpload('cassava', 'cassavaFlour')}
                 className="px-2 py-1 text-xs text-white bg-green-500 rounded-lg hover:bg-green-600"
                 disabled={uploading.cassavaFlour}
               >

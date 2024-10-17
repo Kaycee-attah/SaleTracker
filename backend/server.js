@@ -23,7 +23,7 @@ app.use(express.json());
 // CORS Middleware
 app.use(cors({
     origin: ["https://saletracker-frontend.onrender.com", "http://localhost:5173"],  // Allow only your frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true  // Allow credentials (cookies, authorization headers, etc.)
 }));
 
