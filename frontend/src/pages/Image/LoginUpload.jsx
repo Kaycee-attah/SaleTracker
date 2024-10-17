@@ -65,7 +65,7 @@ const LoginUpload = () => {
 const fetchLatestImage = async () => {
     try {
         // Make a GET request to fetch the most recent image
-        const response = await fetch(`${BASE_URL}/pictures/latest-image`, {
+        const response = await fetch(`${BASE_URL}/latest-image`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

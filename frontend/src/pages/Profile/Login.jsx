@@ -63,6 +63,38 @@ const Login = () => {
         }
     };
 
+    const fetchLatestImage = async () => {
+        try {
+            // Make a GET request to fetch the most recent image
+            const response = await fetch(`${BASE_URL}/latest-image`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+      
+            // Check if the request was successful
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.imageUrl && data.imageId) {
+                    setImageUrl(data.imageUrl); // Set the image URL in state
+                    const latestImageId = data.imageId; // Get the image ID
+                    // Optionally, fetch more details of the image by its ID if needed
+                    const fetchedImage = await fetchImageUrlById(latestImageId);
+                    console.log(fetchedImage); // Do something with the fetched image, if needed
+                }
+            } else {
+                console.error('Failed to fetch the latest image: ', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching the latest image: ', error);
+        }
+      };
+    
+        useEffect(() => {
+            fetchLatestImage();
+        }, []);
+
     // Automatically clear error or success message after 5 seconds
     useEffect(() => {
         const timer = setTimeout(() => {
