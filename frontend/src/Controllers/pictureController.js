@@ -13,6 +13,8 @@ export const uploadImage = async (file) => {
 
 // Function to save image URL to MongoDB using fetch
 export const saveImageUrl = async (url) => {
+    console.log(url);
+    
     try {
         const response = await fetch(`${BASE_URL}/save-image`, {
             method: 'POST',

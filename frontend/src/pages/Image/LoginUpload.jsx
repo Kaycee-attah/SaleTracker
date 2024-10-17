@@ -3,15 +3,24 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../Controllers/userController';
 import { UserContext } from '../../Contexts/userContext';
-import { fetchImageUrlById, saveImageUrl, uploadImage, } from '../../Controllers/pictureController';
+import { fetchImageUrlById, saveImageUrl } from '../../Controllers/pictureController';
+import { uploadImage } from '../../Controllers/imgController';
 
 const LoginUpload = () => {
+    const BASE_URL = 'https://saletracker-backend.onrender.com/api';
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
+
+    // States for image upload progress
     const [imageFile, setImageFile] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
+    const [img, setImg] = useState({})
+    const [uploadError, setUploadError] = useState('');
+    const [uploadSuccess, setUploadSuccess] = useState('');
+    const [uploading, setUploading] = useState(false); // Track uploading state
+
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -31,25 +40,59 @@ const LoginUpload = () => {
     // Upload the selected image to Firebase and save URL to MongoDB
     const handleImageUpload = async () => {
         if (imageFile) {
+            setUploading(true); // Start the uploading process
+            setUploadError('');
+            setUploadSuccess('');
+
             try {
                 // Upload image to Firebase Storage
-                const url = await uploadImage(imageFile);
-                setImageUrl(url); // Set uploaded image URL in state
-
-                // Save image URL to MongoDB
-                const savedImage = await saveImageUrl(url);
-                
-                // Fetch the image by its ID
-                const fetchedImage = await fetchImageUrlById(savedImage._id);
-
-                // Set the fetched image URL
-                setImageUrl(fetchedImage.url);
-                setSuccess('Image uploaded and saved successfully!');
+                const Img = await uploadImage(imageFile);
+                setImg(Img)
+                setImageUrl(Img.imageUrl); // Set uploaded image URL in state
+                console.log(imageUrl);
+                setUploadSuccess('Image uploaded and saved successfully!');
             } catch (error) {
-                setError('Failed to upload image: ' + error.message);
+                setUploadError('Failed to upload image: ' + error.message);
+            } finally {
+                setUploading(false); // End the uploading process
             }
+        } else {
+            setUploadError('Please select an image to upload.');
         }
     };
+
+    // Fetch the latest image from the backend using fetch
+const fetchLatestImage = async () => {
+    try {
+        // Make a GET request to fetch the most recent image
+        const response = await fetch(`${BASE_URL}/pictures/latest-image`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+  
+        // Check if the request was successful
+        if (response.ok) {
+            const data = await response.json();
+            if (data && data.imageUrl && data.imageId) {
+                setImageUrl(data.imageUrl); // Set the image URL in state
+                const latestImageId = data.imageId; // Get the image ID
+                // Optionally, fetch more details of the image by its ID if needed
+                const fetchedImage = await fetchImageUrlById(latestImageId);
+                console.log(fetchedImage); // Do something with the fetched image, if needed
+            }
+        } else {
+            console.error('Failed to fetch the latest image: ', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching the latest image: ', error);
+    }
+  };
+
+    useEffect(() => {
+        fetchLatestImage();
+    }, []);
 
     // Handle form submission for login
     const handleSubmit = async (e) => {
@@ -92,9 +135,11 @@ const LoginUpload = () => {
         const timer = setTimeout(() => {
             setError('');
             setSuccess('');
+            setUploadError('');
+            setUploadSuccess('');
         }, 5000);
         return () => clearTimeout(timer);
-    }, [error, success]);
+    }, [error, success, uploadError, uploadSuccess]);
 
     return (
         <div className="flex items-center justify-center w-full min-h-screen bg-gray-100">
@@ -131,9 +176,18 @@ const LoginUpload = () => {
                         <button
                             onClick={handleImageUpload}
                             className="p-2 mt-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                            disabled={uploading}
                         >
-                            Upload Image
+                            {uploading ? 'Uploading...' : 'Upload Image'}
                         </button>
+
+                        {/* Display upload error or success */}
+                        {uploadError && (
+                            <div className="mt-2 text-red-500">{uploadError}</div>
+                        )}
+                        {uploadSuccess && (
+                            <div className="mt-2 text-green-500">{uploadSuccess}</div>
+                        )}
                     </div>
                 </div>
 
@@ -142,7 +196,7 @@ const LoginUpload = () => {
                     <h2 className="text-3xl font-bold text-center text-gray-800">Welcome to SUMUD</h2>
                     <p className="mb-6 text-sm text-center text-gray-500">Log in to your account</p>
 
-                    {/* Display error or success messages */}
+                    {/* Display login error or success messages */}
                     {error && (
                         <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
                             {error}

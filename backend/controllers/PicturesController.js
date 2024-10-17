@@ -33,3 +33,20 @@ export const fetchImageUrlById = async (req, res) => {
     }
 };
 
+// Fetch the most recent image
+export const getLatestImage = async (req, res) => {
+    try {
+        // Find the most recent image by sorting based on creation time (createdAt)
+        const latestImage = await Image.findOne().sort({ createdAt: -1 }).exec();
+        if (latestImage) {
+            res.status(200).json({
+                imageUrl: latestImage.imageUrl,
+                imageId: latestImage._id,
+            });
+        } else {
+            res.status(404).json({ message: 'No image found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching the latest image', error });
+    }
+};

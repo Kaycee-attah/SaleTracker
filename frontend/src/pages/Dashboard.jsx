@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../Contexts/userContext';
+import { logoutUser } from '../Controllers/userController';
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('placeOrder');
@@ -32,7 +33,22 @@ const Dashboard = () => {
         setUser({email: "" })
         navigate('/login'); // Redirect to login after logout
     }
-};
+  };
+
+    const handleNavLinks = (id, name) => {
+        setActiveTab(id)
+        console.log(name);
+        if (name === "Logout") {
+            const isLoggedOut = logoutUser(); // Call the logout function
+
+            if (isLoggedOut) {
+                // Updating User State 
+                setUser({email: "" })
+                navigate('/login'); // Redirect to login after logout
+            }
+        }
+    
+    }
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -43,7 +59,7 @@ const Dashboard = () => {
                     {navItems.map((item) => (
                         <button
                             key={item.key}
-                            onClick={() => setActiveTab(item.key)}
+                            onClick={() => handleNavLinks(item.key, item.name)}
                             className={`w-full py-2 text-left text-white hover:bg-gray-600 transition ${
                                 activeTab === item.key ? 'bg-gray-600' : ''
                             }`}
