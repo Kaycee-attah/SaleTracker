@@ -4,13 +4,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../Controllers/userController';
 import { UserContext } from '../../Contexts/userContext';
+import { fetchImageUrlById } from '../../Controllers/ImagesControllers/pictureController';
 
+const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const { setUser } = useContext(UserContext)
+    const [imageUrl, setImageUrl] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -112,7 +115,7 @@ const Login = () => {
                 {/* Left Side: Image */}
                 <div className="relative w-full md:w-1/2">
                     <img
-                        src={`https://saletracker-frontend.onrender.com/src/assets/images/food.png`} // replace with the path to your actual cassava image
+                        src={imageUrl || `https://saletracker-frontend.onrender.com/src/assets/images/food.png`} // replace with the path to your actual cassava image
                         alt="Egusi Soup with Cassava Flour"
                         className="object-cover w-full h-full"
                     />
