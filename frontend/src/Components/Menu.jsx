@@ -1,13 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/app.css'; // Import your CSS file here
 import { logoutUser } from '../Controllers/userController';
 import { UserContext } from '../Contexts/userContext';
 
 const Menu = () => {
+  const BASE_URL = 'https://saletracker-backend.onrender.com/api';
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { setUser } = useContext(UserContext)
+  const [imageUrl, setImageUrl] = useState("");
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState(localStorage.getItem('email'))
+  const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
+
+  const userEmail = localStorage.getItem('email');
 
   // Function to toggle menu
   const toggleMenu = () => {
@@ -32,6 +39,43 @@ const Menu = () => {
     }
 };
 
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      if (!userEmail) throw new Error('User email not found');
+
+      const response = await fetch(`${BASE_URL}/current-user/${userEmail}`);
+      if (!response.ok) throw new Error('Failed to fetch user data');
+      const data = await response.json();
+
+      setUser(data);
+      setName(data.name)
+      
+      const adminResponse = await fetch(`${BASE_URL}/admin-user/id/${data._id}`);
+      if (adminResponse.ok) {
+        const adminData = await adminResponse.json();
+        
+        setImageUrl(adminData.imageUrl || "");
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setStatusMessage({ type: 'error', message: error.message });
+    }
+  };
+
+  fetchUserData();
+}, [userEmail]);
+
+useEffect(() => {
+  // Clear the status message after 5 seconds
+  if (statusMessage.message) {
+    const timer = setTimeout(() => {
+      setStatusMessage({ type: '', message: '' });
+    }, 5000);
+    return () => clearTimeout(timer);
+  }
+}, [statusMessage]);
+
   return (
     <>
       {/* Mobile Hamburger Icon - Only visible when the sidebar is closed */}
@@ -53,13 +97,13 @@ const Menu = () => {
           {/* User Profile */}
           <div className="flex items-center space-x-4">
             <img
-              src="https://via.placeholder.com/50"
+              src={imageUrl || "https://via.placeholder.com/150"}
               alt="User Avatar"
               className="w-12 h-12 rounded-full"
             />
             <div>
-              <h4 className="text-lg font-semibold">Liam Moore</h4>
-              <p className="text-sm">liamore@gmail.com</p>
+              <h4 className="text-lg font-semibold">{name || "Liam Moore"}</h4>
+              <p className="text-sm">{email || "liamore@gmail.com"}</p>
             </div>
           </div>
 

@@ -2,7 +2,7 @@
 import express from 'express';
 import { uploadImageUrl } from '../controllers/ImagesControllers/uploadImageController.js';
 import { fetchImageUrlById, getLatestImage, saveImageUrl } from '../controllers/ImagesControllers/PicturesController.js';
-import { uploadLandingPageImageUrl } from '../controllers/ImagesControllers/LandingPageImagesController.js';
+import { fetchImageBySection, uploadLandingPageImageUrl } from '../controllers/ImagesControllers/LandingPageImagesController.js';
 
 const router = express.Router();
 
@@ -17,6 +17,9 @@ router.get('/fetch-image/:id', fetchImageUrlById);
 router.get('/latest-image', getLatestImage);
 
 router.post('/upload-landingpage', uploadLandingPageImageUrl);
+
+// Route to fetch image based on section and name
+router.get('/fetch-image/:section/:name', fetchImageBySection);
 
 
 export { router as imageUrlRoutes }

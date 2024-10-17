@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { uploadImage } from '../../Controllers/ImagesControllers/imgController';
-import { saveLandingPageImageUrlToDB, uploadLandingPageImage } from '../../Controllers/ImagesControllers/landingPageImagesController';
+import React, { useEffect, useState } from 'react';
 
 const LandingUpload = () => {
-  const [imageFile, setImageFile] = useState(null);
+  const BASE_URL = 'https://saletracker-backend.onrender.com/api';
   const [imageUrl, setImageUrl] = useState({
     hero: '',
     product1: '',
@@ -19,6 +17,43 @@ const LandingUpload = () => {
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
 
+  // Fetch images based on section and fileName
+  const fetchImages = async () => {
+    try {
+      const sections = [
+        { section: 'landing', name: 'hero' },
+        { section: 'products', name: 'product1' },
+        { section: 'products', name: 'product2' },
+        { section: 'cassava', name: 'cassavaFlour' },
+      ];
+
+      const fetchedImages = await Promise.all(
+        sections.map(async ({ section, name }) => {
+          const response = await fetch(`${BASE_URL}/fetch-image/${section}/${name}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch image for ${section} - ${name}`);
+          }
+          const data = await response.json();
+          return { name, url: data.imageUrl };
+        })
+      );
+
+      // Set the image URLs for each section
+      const newImageUrl = fetchedImages.reduce((acc, { name, url }) => {
+        acc[name] = url;
+        return acc;
+      }, {});
+
+      setImageUrl(newImageUrl);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages(); // Fetch images when the component loads
+  }, []);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -26,24 +61,9 @@ const LandingUpload = () => {
     }
   };
 
-  const handleUpload = async () => {
-    const uploadedImage = await uploadLandingPageImage(imageFile);
-    if (uploadedImage) {
-      setImageUrl(uploadedImage.imageUrl);
-      alert('Image uploaded successfully!');
-  
-      // Save the URL to MongoDB
-      try {
-        await saveLandingPageImageUrlToDB(uploadedImage.imageUrl, 'section-name', uploadedImage.fileName);
-        alert('Image URL saved to database successfully!');
-      } catch (error) {
-        alert(error.message);
-      }
-    } else {
-      alert('Failed to upload image.');
-    }
+  const handleUpload = async (section) => {
+    // Upload logic here...
   };
-  
 
   return (
     <div className="w-full min-h-screen overflow-y-scroll bg-white">
@@ -157,28 +177,6 @@ const LandingUpload = () => {
           </div>
         </div>
       </section>
-
-      {/* Image Upload Section */}
-      <section className="py-16 bg-gray-100">
-        <div className="max-w-6xl px-6 mx-auto">
-          <h2 className="mb-4 text-3xl font-bold text-gray-800">Upload Your Image</h2>
-          <input type="file" accept="image/*" onChange={handleImageChange} className="mb-4" />
-          <button
-            onClick={() => handleUpload('general')}
-            className="px-6 py-2 font-bold text-white transition duration-300 bg-green-500 rounded hover:bg-green-600"
-          >
-            Upload Image
-          </button>
-          {imageUrl.general && (
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold">Uploaded Image URL:</h3>
-              <p>{imageUrl.general}</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Footer Section */}
     </div>
   );
 };
