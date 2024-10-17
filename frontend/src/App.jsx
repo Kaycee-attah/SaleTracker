@@ -25,6 +25,7 @@ import AllUsers from "./pages/Profile/AllUsers";
 import Dashboard from "./pages/Dashboard";
 import UploadImages from "./pages/Image/UploadImage";
 import LoginUpload from "./pages/Image/LoginUpload";
+import LandingUpload from "./pages/Image/LandingUpload";
 
 const App = () => {
     return (
@@ -59,6 +60,7 @@ const App = () => {
                       <Route path="all-users" element={<AllUsers />} />
                       <Route path="upload-images" element={<UploadImages />} />
                       <Route path="upload/login" element={<LoginUpload />} />
+                      <Route path="upload/landing" element={<LandingUpload />} />
                   </Route>
               </Route>
           </Routes>

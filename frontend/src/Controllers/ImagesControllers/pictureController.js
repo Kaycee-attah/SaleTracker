@@ -1,4 +1,4 @@
-import { storage } from '../firebase';
+import { storage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 

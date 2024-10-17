@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { uploadImage } from '../Controllers/imgController';
+import { uploadImage } from '../Controllers/ImagesControllers/imgController';
 
-const Landing = ({ isEditing }) => {
+const Landing = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
 
@@ -12,11 +12,11 @@ const Landing = ({ isEditing }) => {
     }
   };
 
-  const handleUpload = async (imageType) => {
+  const handleUpload = async () => {
     const uploadedImage = await uploadImage(imageFile);
     if (uploadedImage) {
       setImageUrl(uploadedImage.imageUrl);
-      alert(`${imageType} Image uploaded successfully!`);
+      alert('Image uploaded successfully!');
     } else {
       alert('Failed to upload image.');
     }
@@ -28,24 +28,9 @@ const Landing = ({ isEditing }) => {
       
       {/* Hero Section */}
       <section
-        className="relative flex flex-col items-center justify-center px-6 py-24 text-center bg-center bg-cover"
-        style={{ backgroundImage: `url(${imageUrl || '../../src/assets/images/Cassava_Flour_3.png'})` }}
+        className="flex flex-col items-center justify-center px-6 py-24 text-center bg-center bg-cover"
+        style={{ backgroundImage: "url('../../src/assets/images/Cassava_Flour_3.png')" }}
       >
-        {isEditing && (
-          <div className="absolute top-4 right-4">
-            <label className="px-3 py-1 text-white bg-green-500 rounded cursor-pointer hover:bg-green-600">
-              Edit Image
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-            </label>
-            <button onClick={() => handleUpload('Hero')} className="px-3 py-1 mt-2 text-white bg-blue-500 rounded">
-              Upload Hero Image
-            </button>
-          </div>
-        )}
         <h1 className="mb-4 text-4xl font-extrabold text-gray-800 md:text-5xl">
           Discover the Taste of Tradition with Sumud
         </h1>
@@ -66,28 +51,9 @@ const Landing = ({ isEditing }) => {
             <p className="mb-6 text-gray-600">
               Bringing you the best in quality and freshness
             </p>
-            <div className="relative flex space-x-4">
-              <img
-                src={imageUrl || '/path/to/image1.jpg'}
-                alt="Product 1"
-                className="object-cover w-24 h-24 rounded-md"
-              />
-              <img
-                src={imageUrl || '/path/to/image2.jpg'}
-                alt="Product 2"
-                className="object-cover w-24 h-24 rounded-md"
-              />
-              {isEditing && (
-                <>
-                  <label className="absolute px-2 py-1 text-white bg-green-500 rounded cursor-pointer top-2 right-2">
-                    Edit Image
-                    <input type="file" onChange={handleImageChange} className="hidden" />
-                  </label>
-                  <button onClick={() => handleUpload('Secondary')} className="px-3 py-1 mt-2 text-white bg-blue-500 rounded">
-                    Upload Image
-                  </button>
-                </>
-              )}
+            <div className="flex space-x-4">
+              <img src="/path/to/image1.jpg" alt="Product 1" className="object-cover w-24 h-24 rounded-md" />
+              <img src="/path/to/image2.jpg" alt="Product 2" className="object-cover w-24 h-24 rounded-md" />
             </div>
           </div>
 
@@ -99,27 +65,48 @@ const Landing = ({ isEditing }) => {
             <p className="mb-6 text-gray-700">
               Rich in fiber and essential nutrients, Sumud cassava flour supports a balanced diet.
             </p>
+            <p className="text-gray-700">
+              Our cassava flour is a healthy substitute for wheat flour.
+            </p>
             <img
-              src={imageUrl || '/path/to/product-image.jpg'}
+              src="/path/to/product-image.jpg"
               alt="Cassava Flour"
               className="absolute bottom-0 right-0 object-cover w-24 h-24 rounded-md"
             />
-            {isEditing && (
-              <>
-                <label className="absolute px-2 py-1 text-white bg-green-500 rounded cursor-pointer top-2 right-2">
-                  Edit Image
-                  <input type="file" onChange={handleImageChange} className="hidden" />
-                </label>
-                <button onClick={() => handleUpload('Right Column')} className="px-3 py-1 mt-2 text-white bg-blue-500 rounded">
-                  Upload Image
-                </button>
-              </>
-            )}
+            <button className="px-6 py-2 mt-6 font-bold text-white transition duration-300 bg-gray-800 rounded hover:bg-gray-700">
+              ORDER NOW
+            </button>
           </div>
         </div>
       </section>
 
+      {/* Image Upload Section */}
+      <section className="py-16 bg-gray-100">
+        <div className="max-w-6xl px-6 mx-auto">
+          <h2 className="mb-4 text-3xl font-bold text-gray-800">Upload Your Image</h2>
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageChange} 
+            className="mb-4" 
+          />
+          <button 
+            onClick={handleUpload} 
+            className="px-6 py-2 font-bold text-white transition duration-300 bg-green-500 rounded hover:bg-green-600"
+          >
+            Upload Image
+          </button>
+          {imageUrl && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold">Uploaded Image URL:</h3>
+              <p>{imageUrl}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Footer Section */}
+      
     </div>
   );
 };

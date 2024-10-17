@@ -1,7 +1,7 @@
  // Adjust the import based on your Firebase configuration
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase';
-import { fetchImageUrlById } from '../../../backend/controllers/PicturesController';
+import { storage } from '../../firebase';
+import { fetchImageUrlById } from '../../../../backend/controllers/ImagesControllers/PicturesController';
 
 const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 

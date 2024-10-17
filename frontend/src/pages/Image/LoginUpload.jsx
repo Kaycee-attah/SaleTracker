@@ -3,8 +3,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../Controllers/userController';
 import { UserContext } from '../../Contexts/userContext';
-import { fetchImageUrlById, saveImageUrl } from '../../Controllers/pictureController';
-import { uploadImage } from '../../Controllers/imgController';
+import { fetchImageUrlById, saveImageUrl } from '../../Controllers/ImagesControllers/pictureController';
+import { uploadImage } from '../../Controllers/ImagesControllers/imgController';
 
 const LoginUpload = () => {
     const BASE_URL = 'https://saletracker-backend.onrender.com/api';

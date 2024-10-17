@@ -1,7 +1,8 @@
 // routes/imageRoutes.js
 import express from 'express';
-import { uploadImageUrl } from '../controllers/uploadImageController.js';
-import { fetchImageUrlById, getLatestImage, saveImageUrl } from '../controllers/PicturesController.js';
+import { uploadImageUrl } from '../controllers/ImagesControllers/uploadImageController.js';
+import { fetchImageUrlById, getLatestImage, saveImageUrl } from '../controllers/ImagesControllers/PicturesController.js';
+import { uploadLandingPageImageUrl } from '../controllers/ImagesControllers/LandingPageImagesController.js';
 
 const router = express.Router();
 
@@ -14,6 +15,8 @@ router.get('/fetch-image/:id', fetchImageUrlById);
 
 // Route to get the most recent image
 router.get('/latest-image', getLatestImage);
+
+router.post('/upload-landingpage', uploadLandingPageImageUrl);
 
 
 export { router as imageUrlRoutes }

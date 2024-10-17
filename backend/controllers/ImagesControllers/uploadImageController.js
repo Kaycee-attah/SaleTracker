@@ -1,4 +1,4 @@
-import Image from "../models/ImagesModel.js";
+import Image from "../../models/ImagesModel/ImagesModel.js";
 
 
 export const uploadImageUrl = async (req, res) => {

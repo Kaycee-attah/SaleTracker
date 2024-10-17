@@ -1,4 +1,4 @@
-import Image from "../models/ImagesModel.js";
+import Image from "../../models/ImagesModel/ImagesModel.js";
 
 // Function to save image URL to MongoDB
 export const saveImageUrl = async (req, res) => {
