@@ -1,11 +1,6 @@
-// models/imageModel.js
 import mongoose from 'mongoose';
 
-const imageSchema = new mongoose.Schema({
-  imageUrl: {
-    type: String,
-    required: true,
-  },
+const ImageSchema = new mongoose.Schema({
   section: {
     type: String,
     required: true,
@@ -13,9 +8,18 @@ const imageSchema = new mongoose.Schema({
   fileName: {
     type: String,
     required: true,
-  }
-}, { timestamps: true });
+  },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-const LandingPageImage = mongoose.model('LandingPageImages', imageSchema);
+const LandingPageImage = mongoose.model('LandingPageImages', ImageSchema);
 
 export default LandingPageImage;
+

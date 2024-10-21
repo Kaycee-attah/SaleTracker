@@ -1,8 +1,11 @@
-// routes/imageRoutes.js
+
 import express from 'express';
+import multer from 'multer';
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 import { uploadImageUrl } from '../controllers/ImagesControllers/uploadImageController.js';
 import { fetchImageUrlById, getLatestImage, saveImageUrl } from '../controllers/ImagesControllers/PicturesController.js';
-import { fetchImageBySection, uploadLandingPageImageUrl } from '../controllers/ImagesControllers/LandingPageImagesController.js';
+import { fetchLatestImage, uploadLandingPageImage } from '../controllers/ImagesControllers/LandingPageImagesController.js';
 
 const router = express.Router();
 
@@ -16,10 +19,15 @@ router.get('/fetch-image/:id', fetchImageUrlById);
 // Route to get the most recent image
 router.get('/latest-image', getLatestImage);
 
-router.post('/upload-landingpage', uploadLandingPageImageUrl);
 
-// Route to fetch image based on section and name
-router.get('/fetch-image/:section/:name', fetchImageBySection);
+// Multer setup for file uploads
+
+// Route for uploading images
+router.post('/upload-image', upload.single('image'), uploadLandingPageImage);
+
+// Route for fetching the latest image
+router.get('/fetch-image/:section/:fileName', fetchLatestImage);
+
 
 
 export { router as imageUrlRoutes }

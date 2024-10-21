@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { saveLandingPageImageUrlToDB, uploadLandingPageImage } from '../../Controllers/ImagesControllers/landingPageImagesController';
+import {
+  saveLandingPageImageUrlToDB,
+  uploadLandingPageImage,
+} from '../../Controllers/ImagesControllers/landingPageImagesController';
 
 const LandingUpload = () => {
   const BASE_URL = 'https://saletracker-backend.onrender.com/api';
@@ -19,9 +22,7 @@ const LandingUpload = () => {
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
 
-  // Fetch images based on section and fileName
-  // Fetch images based on section and fileName
-const fetchImages = async () => {
+  const fetchImages = async () => {
     try {
       const sections = [
         { section: 'landing', name: 'hero' },
@@ -29,8 +30,7 @@ const fetchImages = async () => {
         { section: 'products', name: 'product2' },
         { section: 'cassava', name: 'cassavaFlour' },
       ];
-  
-      // Fetch images in parallel
+
       const fetchedImages = await Promise.all(
         sections.map(async ({ section, name }) => {
           const response = await fetch(`${BASE_URL}/fetch-image/${section}/${name}`);
@@ -38,30 +38,20 @@ const fetchImages = async () => {
             throw new Error(`Failed to fetch image for ${section} - ${name}`);
           }
           const data = await response.json();
-          
-          
           return { name, url: data.imageUrl };
         })
       );
-  
-      // Set the image URLs for each section
+
       const newImageUrl = fetchedImages.reduce((acc, { name, url }) => {
-        console.log(name, url);
-        acc[name] = url;  // Set the correct image URL for each section
+        acc[name] = url;
         return acc;
       }, {});
-  
-      // Update the state with the new image URLs
+
       setImageUrl(newImageUrl);
     } catch (error) {
       console.error('Error fetching images:', error);
     }
   };
-
-  useEffect(() => {
-    console.log('Updated imageUrl:', imageUrl);
-  }, [imageUrl]);  // This useEffect will log whenever imageUrl is updated
-  
 
   useEffect(() => {
     fetchImages(); // Fetch images when the component loads
@@ -75,31 +65,45 @@ const fetchImages = async () => {
   };
 
   const handleUpload = async (sectionName, fileName) => {
-    const uploadedImage = await uploadLandingPageImage(imageFile);
-    if (uploadedImage) {
-      setImageUrl(uploadedImage.imageUrl);
-      
-      alert('Image uploaded successfully!');
-  
-      // Save the URL to MongoDB
-      try {
-        await saveLandingPageImageUrlToDB(uploadedImage.imageUrl, sectionName, fileName);
-        alert('Image URL saved to database successfully!');
-      } catch (error) {
-        alert(error.message);
+    if (!imageFile) {
+      setUploadError('Please select an image file to upload.');
+      return;
+    }
+
+    setUploading((prev) => ({ ...prev, [fileName]: true }));
+    setUploadError('');
+    setUploadSuccess('');
+
+    try {
+      const uploadedImage = await uploadLandingPageImage(imageFile);
+      if (uploadedImage) {
+        const imageUrl = uploadedImage.imageUrl;
+
+        // Save the image URL to the database
+        await saveLandingPageImageUrlToDB(imageUrl, sectionName, fileName);
+
+        // Update the local state with the new image URL
+        setImageUrl((prev) => ({ ...prev, [fileName]: imageUrl }));
+
+        setUploadSuccess('Image uploaded and saved successfully!');
+      } else {
+        throw new Error('Image upload failed.');
       }
-    } else {
-      alert('Failed to upload image.');
+    } catch (error) {
+      setUploadError(error.message || 'Failed to upload image.');
+    } finally {
+      setUploading((prev) => ({ ...prev, [fileName]: false }));
     }
   };
 
   return (
     <div className="w-full min-h-screen overflow-y-scroll bg-white">
       {/* Hero Section */}
-      
       <section
         className="relative flex flex-col items-center justify-center px-6 py-24 text-center bg-center bg-cover"
-        style={{ backgroundImage: `url(${imageUrl.hero || '../../src/assets/images/Cassava_Flour_3.png'})` }}
+        style={{
+          backgroundImage: `url(${imageUrl.hero || '../../src/assets/images/Cassava_Flour_3.png'})`,
+        }}
       >
         <h1 className="mb-4 text-4xl font-extrabold text-gray-800 md:text-5xl">
           Discover the Taste of Tradition with Sumud
@@ -112,7 +116,10 @@ const fetchImages = async () => {
         </button>
         <div className="absolute flex space-x-2 bottom-4 right-4">
           <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="hero-upload" />
-          <label htmlFor="hero-upload" className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600">
+          <label
+            htmlFor="hero-upload"
+            className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600"
+          >
             Edit Hero
           </label>
           <button
@@ -141,7 +148,10 @@ const fetchImages = async () => {
                 />
                 <div className="absolute bottom-0 right-0 flex space-x-2">
                   <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="product1-upload" />
-                  <label htmlFor="product1-upload" className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600">
+                  <label
+                    htmlFor="product1-upload"
+                    className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600"
+                  >
                     Edit
                   </label>
                   <button
@@ -162,7 +172,10 @@ const fetchImages = async () => {
                 />
                 <div className="absolute bottom-0 right-0 flex space-x-2">
                   <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="product2-upload" />
-                  <label htmlFor="product2-upload" className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600">
+                  <label
+                    htmlFor="product2-upload"
+                    className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600"
+                  >
                     Edit
                   </label>
                   <button
@@ -179,8 +192,12 @@ const fetchImages = async () => {
 
           {/* Right Column */}
           <div className="relative p-6 bg-yellow-500 rounded-md shadow-lg">
-            <h3 className="mb-4 text-xl font-bold text-gray-900">Elevate Your Meals with Sumud's Premium Flour</h3>
-            <p className="mb-6 text-gray-700">Rich in fiber and essential nutrients, Sumud cassava flour supports a balanced diet.</p>
+            <h3 className="mb-4 text-xl font-bold text-gray-900">
+              Elevate Your Meals with Sumud's Premium Flour
+            </h3>
+            <p className="mb-6 text-gray-700">
+              Rich in fiber and essential nutrients, Sumud cassava flour supports a balanced diet.
+            </p>
             <p className="text-gray-700">Our cassava flour is a healthy substitute for wheat flour.</p>
             <img
               src={imageUrl.cassavaFlour || '/path/to/product-image.jpg'}
@@ -189,7 +206,10 @@ const fetchImages = async () => {
             />
             <div className="absolute flex space-x-2 bottom-4 right-4">
               <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="cassavaFlour-upload" />
-              <label htmlFor="cassavaFlour-upload" className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600">
+              <label
+                htmlFor="cassavaFlour-upload"
+                className="px-2 py-1 text-xs text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600"
+              >
                 Edit
               </label>
               <button
@@ -200,12 +220,12 @@ const fetchImages = async () => {
                 {uploading.cassavaFlour ? 'Uploading...' : 'Upload'}
               </button>
             </div>
-            <button className="px-6 py-2 mt-6 font-bold text-white transition duration-300 bg-gray-800 rounded hover:bg-gray-700">
-              ORDER NOW
-            </button>
           </div>
         </div>
       </section>
+      {/* Error and Success Notifications */}
+      {uploadError && <p className="text-center text-red-500">{uploadError}</p>}
+      {uploadSuccess && <p className="text-center text-green-500">{uploadSuccess}</p>}
     </div>
   );
 };

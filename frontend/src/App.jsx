@@ -1,10 +1,8 @@
-// App.js
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AddExpense from "./pages/Expenses/AddExpense";
 import ManageExpense from "./pages/Expenses/ManageExpense";
 import UserProfile from "./pages/Profile/User";
-import AddCategories from "./pages/Expenses/AddCategories";
-
+import AddCategories from "./pages/Expenses/AddCategories"
 import AddSalesCategory from "./pages/Sales/AddSalesCategory";
 import ManageSales from "./pages/Sales/ManageSales";
 import AddBatch from "./pages/Batch/AddBatch";
@@ -26,6 +24,8 @@ import Dashboard from "./pages/Dashboard";
 import UploadImages from "./pages/Image/UploadImage";
 import LoginUpload from "./pages/Image/LoginUpload";
 import LandingUpload from "./pages/Image/LandingUpload";
+
+
 
 const App = () => {
     return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { uploadImage } from '../Controllers/ImagesControllers/imgController';
+import Sumud from '../Components/Sumud';
 
 const Landing = () => {
   const [imageFile, setImageFile] = useState(null);
@@ -52,7 +53,7 @@ const Landing = () => {
               Bringing you the best in quality and freshness
             </p>
             <div className="flex space-x-4">
-              <img src="/path/to/image1.jpg" alt="Product 1" className="object-cover w-24 h-24 rounded-md" />
+              <Sumud />
               <img src="/path/to/image2.jpg" alt="Product 2" className="object-cover w-24 h-24 rounded-md" />
             </div>
           </div>

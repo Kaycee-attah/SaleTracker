@@ -1,34 +1,43 @@
-import LandingPageImage from "../../models/ImagesModel/LandingPageImagesModel.js";
+import LandingPageImage from '../../models/ImagesModel/LandingPageImagesModel.js'
+import { uploadImageToFirebase } from '../../Firebase/firebaseStoring.js';
 
-
-export const uploadLandingPageImageUrl = async (req, res) => {
-  const { imageUrl, section, fileName } = req.body;
-
-  if (!imageUrl || !section || !fileName) {
-    return res.status(400).json({ message: 'All fields are required.' });
-  }
-
+// Upload Image and Save URL to MongoDB
+export const uploadLandingPageImage = async (req, res) => {
   try {
-    const newImage = new LandingPageImage({ imageUrl, section, fileName });
+    const { section, fileName } = req.body;
+    const file = req.file;
+
+    // Upload the file to Firebase and get the download URL
+    const imageUrl = await uploadImageToFirebase(file, section, fileName);
+
+    // Save the image URL to MongoDB
+    const newImage = new LandingPageImage({
+      section,
+      fileName,
+      imageUrl,
+    });
     await newImage.save();
-    return res.status(201).json({ message: 'Image URL saved successfully', newImage });
+
+    res.status(200).json({ message: 'Image uploaded successfully', imageUrl });
   } catch (error) {
-    return res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: 'Image upload failed', error: error.message });
   }
 };
 
-export const fetchImageBySection = async (req, res) => {
-    const { section, name } = req.params;
-  
-    try {
-      const image = await LandingPageImage.findOne({ section, fileName: name });
-  
-      if (!image) {
-        return res.status(404).json({ message: 'Image not found' });
-      }
-  
-      res.status(200).json({ imageUrl: image.imageUrl });
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching image', error });
+// Fetch the latest image for a specific section
+export const fetchLatestImage = async (req, res) => {
+  try {
+    const { section, fileName } = req.params;
+    
+    // Get the latest image for the section
+    const latestImage = await LandingPageImage.findOne({ section, fileName }).sort({ createdAt: -1 });
+    
+    if (!latestImage) {
+      return res.status(404).json({ message: 'No image found' });
     }
-  };
+
+    res.status(200).json({ imageUrl: latestImage.imageUrl });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch image', error: error.message });
+  }
+};

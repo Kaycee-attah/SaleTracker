@@ -1,36 +1,62 @@
-import { handleUploadToFirebase } from "../firebaseController";
-
 const BASE_URL = 'https://saletracker-backend.onrender.com/api';
 
-export const uploadLandingPageImage = async (imageFile) => {
-    // const formData = new FormData();
-    // formData.append('image', imageFile);
-    
-    
-  
-    // Assuming you have a function to handle the upload of the image and get its URL
-    const uploadedImage = await handleUploadToFirebase(imageFile); // Placeholder function
-  
-    console.log(uploadedImage);
-    
-    return uploadedImage; // Should return { imageUrl: 'url', section: 'section-name', fileName: 'file-name' }
-  };
-  
-  export const saveLandingPageImageUrlToDB = async (imageUrl, section, fileName) => {
-    console.log(imageUrl, section, fileName);
-    
-    const response = await fetch(`${BASE_URL}/upload-landingpage`, {
+export const uploadLandingPageImage = async (file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await fetch(`${BASE_URL}/upload-image`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.message);
+    }
+  } catch (error) {
+    console.error('Image upload failed:', error);
+  }
+};
+
+export const saveLandingPageImageUrlToDB = async (imageUrl, section, fileName) => {
+  try {
+    const response = await fetch(`${BASE_URL}/save-image-url`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ imageUrl, section, fileName }),
+      body: JSON.stringify({
+        imageUrl,
+        section,
+        fileName,
+      }),
     });
-  
-    if (!response.ok) {
-      throw new Error('Failed to save image URL to database');
+
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.message);
     }
-    
-    return await response.json();
-  };
-  
+  } catch (error) {
+    console.error('Failed to save image URL to DB:', error);
+  }
+};
+
+export const fetchLandingPageImage = async (section, fileName) => {
+  try {
+    const response = await fetch(`${BASE_URL}/fetch-image/${section}/${fileName}`);
+    const data = await response.json();
+
+    if (response.ok) {
+      return data.imageUrl;
+    } else {
+      throw new Error('Failed to fetch image');
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+};

@@ -38,41 +38,43 @@ const AllUsers = () => {
   }, []);
 
   return (
-    <div className="w-full p-8 bg-white rounded-lg shadow-lg">
-      <h2 className="mb-4 text-xl font-semibold">Manage Users</h2>
-      <table className="min-w-full table-auto">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 text-left">Email</th>
-            <th className="px-4 py-2 text-left">Created At</th>
-            <th className="px-4 py-2 text-left">Role</th>
-            <th className="px-4 py-2 text-left">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td className="px-4 py-2">{user.email}</td>
-              <td className="px-4 py-2">{new Date(user.createdAt).toLocaleDateString()}</td>
-              <td className="px-4 py-2">{user.role}</td>
-              <td className="px-4 py-2">
-                <button
-                  className="px-4 py-1 mr-2 text-white bg-blue-500 rounded"
-                  onClick={() => handleEdit(user._id, prompt('Enter new role:', user.role))}
-                >
-                  Edit
-                </button>
-                <button
-                  className="px-4 py-1 text-white bg-red-500 rounded"
-                  onClick={() => handleDelete(user._id)}
-                >
-                  Delete
-                </button>
-              </td>
+    <div className="w-full h-screen p-4 bg-white rounded-lg shadow-lg md:p-8">
+      <h2 className="mb-4 text-lg font-semibold text-center md:text-xl">Manage Users</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-auto">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-2 py-2 text-sm text-left md:px-4 md:text-base">Email</th>
+              <th className="px-2 py-2 text-sm text-left md:px-4 md:text-base">Created At</th>
+              <th className="px-2 py-2 text-sm text-left md:px-4 md:text-base">Role</th>
+              <th className="px-2 py-2 text-sm text-left md:px-4 md:text-base">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} className="border-b">
+                <td className="px-2 py-2 text-sm md:px-4 md:text-base">{user.email}</td>
+                <td className="px-2 py-2 text-sm md:px-4 md:text-base">{new Date(user.createdAt).toLocaleDateString()}</td>
+                <td className="px-2 py-2 text-sm md:px-4 md:text-base">{user.role}</td>
+                <td className="flex flex-col gap-2 px-2 py-2 md:px-4 md:flex-row">
+                  <button
+                    className="px-2 py-1 text-xs text-white bg-blue-500 rounded md:text-sm"
+                    onClick={() => handleEdit(user._id, prompt('Enter new role:', user.role))}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="px-2 py-1 text-xs text-white bg-red-500 rounded md:text-sm"
+                    onClick={() => handleDelete(user._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
