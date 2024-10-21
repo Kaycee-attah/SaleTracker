@@ -5,7 +5,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 import { uploadImageUrl } from '../controllers/ImagesControllers/uploadImageController.js';
 import { fetchImageUrlById, getLatestImage, saveImageUrl } from '../controllers/ImagesControllers/PicturesController.js';
-import { fetchCassavaFlourImage, fetchHeroImage, fetchLatestImage, fetchProduct1Image, fetchProduct2Image, uploadCassavaFlourImage, uploadHeroImage, uploadLandingPageImage, uploadProduct1Image, uploadProduct2Image } from '../controllers/ImagesControllers/LandingPageImagesController.js';
+import { fetchCassavaFlourImage, fetchHeroImage, fetchProduct1Image, fetchProduct2Image, uploadCassavaFlourImage, uploadHeroImage,  uploadProduct1Image, uploadProduct2Image } from '../controllers/ImagesControllers/LandingPageImagesController.js';
 
 const router = express.Router();
 
@@ -22,11 +22,11 @@ router.get('/latest-image', getLatestImage);
 
 // Multer setup for file uploads
 
-// Route for uploading images
-router.post('/upload-image', upload.single('image'), uploadLandingPageImage);
+// // Route for uploading images
+// router.post('/upload-image', upload.single('image'), uploadLandingPageImage);
 
-// Route for fetching the latest image
-router.get('/fetch-image/:section/:fileName', fetchLatestImage);
+// // Route for fetching the latest image
+// router.get('/fetch-image/:section/:fileName', fetchLatestImage);
 
 
 
