@@ -5,7 +5,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 import { uploadImageUrl } from '../controllers/ImagesControllers/uploadImageController.js';
 import { fetchImageUrlById, getLatestImage, saveImageUrl } from '../controllers/ImagesControllers/PicturesController.js';
-import { fetchLatestImage, uploadLandingPageImage } from '../controllers/ImagesControllers/LandingPageImagesController.js';
+import { fetchCassavaFlourImage, fetchHeroImage, fetchLatestImage, fetchProduct1Image, fetchProduct2Image, uploadCassavaFlourImage, uploadHeroImage, uploadLandingPageImage, uploadProduct1Image, uploadProduct2Image } from '../controllers/ImagesControllers/LandingPageImagesController.js';
 
 const router = express.Router();
 
@@ -27,6 +27,20 @@ router.post('/upload-image', upload.single('image'), uploadLandingPageImage);
 
 // Route for fetching the latest image
 router.get('/fetch-image/:section/:fileName', fetchLatestImage);
+
+
+
+// Image upload routes
+router.post('/upload-hero-image', uploadHeroImage);
+router.post('/upload-product1-image', uploadProduct1Image);
+router.post('/upload-product2-image', uploadProduct2Image);
+router.post('/upload-cassava-image', uploadCassavaFlourImage);
+
+// Fetch latest image routes
+router.get('/fetch-hero-image', fetchHeroImage);
+router.get('/fetch-product1-image', fetchProduct1Image);
+router.get('/fetch-product2-image', fetchProduct2Image);
+router.get('/fetch-cassava-image', fetchCassavaFlourImage);
 
 
 

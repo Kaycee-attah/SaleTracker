@@ -65,6 +65,8 @@ const LandingUpload = () => {
   };
 
   const handleUpload = async (sectionName, fileName) => {
+    console.log(sectionName, fileName);
+    
     if (!imageFile) {
       setUploadError('Please select an image file to upload.');
       return;
@@ -77,6 +79,8 @@ const LandingUpload = () => {
     try {
       const uploadedImage = await uploadLandingPageImage(imageFile);
       if (uploadedImage) {
+        console.log(uploadedImage);
+        
         const imageUrl = uploadedImage.imageUrl;
 
         // Save the image URL to the database
